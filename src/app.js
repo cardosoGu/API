@@ -20,7 +20,7 @@ dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(resolve(__dirname, 'uploads')));
+app.use(express.static(resolve(__dirname, '..', 'uploads')));
 
 // routes
 app.use('/user', UserRouter);
