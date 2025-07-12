@@ -1,0 +1,6 @@
+node_modules
+.env
+notasSequelize.txt
+notasController.txt
+valoresOnMigrations.txt
+migrateModelNotas.txt
