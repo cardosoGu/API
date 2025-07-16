@@ -1,14 +1,20 @@
 🚀 API de Gerenciamento de Usuários e Alunos
+
 API REST feita com Node.js, Express e PostgreSQL para gerenciar usuários e alunos, com operações CRUD, autenticação básica e upload de fotos referenciadas aos alunos.
 
 Ideal pra quem quer uma base limpa e funcional para APIs completas.
 
 🛠️ Funcionalidades
 ✅ Cadastro, listagem, atualização e exclusão de usuários (nome, email, senha)
+
 ✅ CRUD completo de alunos
+
 ✅ Upload e referência de fotos para alunos
+
 ✅ Autenticação de usuários (login, geração de token, sem JWT avançado)
+
 ✅ Validações de dados de entrada
+
 ✅ Organização limpa de controllers, rotas e middlewares
 
 🧰 Tecnologias
