@@ -1,6 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _express = require('express'); var _express2 = _interopRequireDefault(_express);
 var _dotenv = require('dotenv'); var _dotenv2 = _interopRequireDefault(_dotenv);
 var _path = require('path');
+var _helmet = require('helmet'); var _helmet2 = _interopRequireDefault(_helmet);
+var _cors = require('cors'); var _cors2 = _interopRequireDefault(_cors);
 
 // models
 require('./database/index');
@@ -17,6 +19,22 @@ var _multerErrorHandler = require('./middlewares/multerErrorHandler'); var _mult
 // apps/configs
 _dotenv2.default.config();
 
+const whitelist = [
+  'http://35.247.228.63:81',
+  'http://localhost:3002',
+
+];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.includes(origin) || origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by cors'));
+    }
+  },
+};
+
 const app = _express2.default.call(void 0, );
 app.use(_express2.default.urlencoded({ extended: true }));
 app.use(_express2.default.json());
@@ -31,5 +49,7 @@ app.use('/photo', _photo2.default);
 
 // middlewares
 app.use(_multerErrorHandler2.default);
+app.use(_cors2.default.call(void 0, corsOptions));
+app.use(_helmet2.default);
 
 exports. default = app;

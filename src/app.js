@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { resolve } from 'path';
+import helmet from 'helmet';
+import cors from 'cors';
 
 // models
 import './database/index';
@@ -17,6 +19,22 @@ import multerErrorHandler from './middlewares/multerErrorHandler';
 // apps/configs
 dotenv.config();
 
+const whitelist = [
+  'http://35.247.228.63:81',
+  'http://localhost:3002',
+
+];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.includes(origin) || origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by cors'));
+    }
+  },
+};
+
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -31,5 +49,7 @@ app.use('/photo', photoRouter);
 
 // middlewares
 app.use(multerErrorHandler);
+app.use(cors(corsOptions));
+app.use(helmet);
 
 export default app;
