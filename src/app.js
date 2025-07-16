@@ -50,6 +50,6 @@ app.use('/photo', photoRouter);
 // middlewares
 app.use(multerErrorHandler);
 app.use(cors(corsOptions));
-app.use(helmet);
+app.use(helmet());
 
 export default app;
