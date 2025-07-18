@@ -21,13 +21,13 @@ dotenv.config();
 
 const whitelist = [
   'http://35.247.228.63:81',
+  'http://localhost:3002',
   'http://localhost:3000',
-
 ];
 
 const corsOptions = {
   origin(origin, callback) {
-    if (whitelist.includes(origin) || origin) {
+    if (!origin || whitelist.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by cors'));

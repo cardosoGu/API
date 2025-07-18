@@ -22,12 +22,12 @@ _dotenv2.default.config();
 const whitelist = [
   'http://35.247.228.63:81',
   'http://localhost:3002',
-
+  'http://localhost:3000',
 ];
 
 const corsOptions = {
   origin(origin, callback) {
-    if (whitelist.includes(origin) || origin) {
+    if (!origin || whitelist.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by cors'));
@@ -35,21 +35,22 @@ const corsOptions = {
   },
 };
 
+// express/security
 const app = _express2.default.call(void 0, );
+app.use(_cors2.default.call(void 0, corsOptions));
+app.use(_helmet2.default.call(void 0, ));
 app.use(_express2.default.urlencoded({ extended: true }));
 app.use(_express2.default.json());
 app.use(_express2.default.static(_path.resolve.call(void 0, __dirname, '..', 'uploads')));
 
 // routes
-app.use('/user', _User2.default);
+app.use('/users', _User2.default);
 app.use('/', _home2.default);
 app.use('/token', _token2.default);
-app.use('/aluno', _aluno2.default);
-app.use('/photo', _photo2.default);
+app.use('/alunos', _aluno2.default);
+app.use('/photos', _photo2.default);
 
 // middlewares
 app.use(_multerErrorHandler2.default);
-app.use(_cors2.default.call(void 0, corsOptions));
-app.use(_helmet2.default.call(void 0, ));
 
 exports. default = app;
