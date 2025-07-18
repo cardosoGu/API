@@ -21,7 +21,7 @@ dotenv.config();
 
 const whitelist = [
   'http://35.247.228.63:81',
-  'http://localhost:3002',
+  'http://localhost:3000',
 
 ];
 
@@ -41,11 +41,11 @@ app.use(express.json());
 app.use(express.static(resolve(__dirname, '..', 'uploads')));
 
 // routes
-app.use('/user', UserRouter);
+app.use('/users', UserRouter);
 app.use('/', homeRouter);
 app.use('/token', TokenRouter);
-app.use('/aluno', alunoRouter);
-app.use('/photo', photoRouter);
+app.use('/alunos', alunoRouter);
+app.use('/photos', photoRouter);
 
 // middlewares
 app.use(multerErrorHandler);

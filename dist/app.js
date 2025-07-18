@@ -50,6 +50,6 @@ app.use('/photo', _photo2.default);
 // middlewares
 app.use(_multerErrorHandler2.default);
 app.use(_cors2.default.call(void 0, corsOptions));
-app.use(_helmet2.default);
+app.use(_helmet2.default.call(void 0, ));
 
 exports. default = app;
