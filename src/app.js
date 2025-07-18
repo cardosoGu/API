@@ -35,7 +35,10 @@ const corsOptions = {
   },
 };
 
+// express/security
 const app = express();
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(resolve(__dirname, '..', 'uploads')));
@@ -49,7 +52,5 @@ app.use('/photos', photoRouter);
 
 // middlewares
 app.use(multerErrorHandler);
-app.use(cors(corsOptions));
-app.use(helmet());
 
 export default app;
