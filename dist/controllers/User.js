@@ -1,11 +1,22 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _user = require('../models/user'); var _user2 = _interopRequireDefault(_user);
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _jsonwebtoken = require('jsonwebtoken'); var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+var _user = require('../models/user'); var _user2 = _interopRequireDefault(_user);
 // create
 
 const create = async (req, res) => {
   try {
     const novoUser = await _user2.default.create(req.body);
+    const { id, nome, email } = novoUser;
 
-    return res.json(novoUser);
+    // cria token de login qnd criar a conta
+    const token = _jsonwebtoken2.default.sign(
+      { id, email },
+      process.env.TOKEN_SECRET,
+      { expiresIn: process.env.TOKEN_EXPIRATION },
+    );
+
+    return res.json({
+      id, email, nome, token,
+    });
   } catch (e) {
     return res.status(400).json({ errors: e.errors.map((err) => err.message) });
   }

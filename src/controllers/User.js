@@ -1,11 +1,22 @@
+import jwt from 'jsonwebtoken';
 import User from '../models/user';
 // create
 
 const create = async (req, res) => {
   try {
     const novoUser = await User.create(req.body);
+    const { id, nome, email } = novoUser;
 
-    return res.json(novoUser);
+    // cria token de login qnd criar a conta
+    const token = jwt.sign(
+      { id, email },
+      process.env.TOKEN_SECRET,
+      { expiresIn: process.env.TOKEN_EXPIRATION },
+    );
+
+    return res.json({
+      id, email, nome, token,
+    });
   } catch (e) {
     return res.status(400).json({ errors: e.errors.map((err) => err.message) });
   }
