@@ -1,60 +1,58 @@
-🚀 API de Gerenciamento de Usuários e Alunos
+Segue o **README limpo, pronto pra colar no GH sem quebrar layout**:
 
-API REST feita com Node.js, Express e PostgreSQL para gerenciar usuários e alunos, com operações CRUD, autenticação básica e upload de fotos referenciadas aos alunos.
+````markdown
+# 🚀 API de Gerenciamento de Usuários e Alunos
 
-Ideal pra quem quer uma base limpa e funcional para APIs completas.
+API REST feita com **Node.js**, **Express** e **PostgreSQL** para gerenciar usuários e alunos, com operações CRUD, autenticação básica e upload de fotos referenciadas aos alunos.
 
-🛠️ Funcionalidades
+Ideal pra quem quer uma **base limpa e funcional para APIs completas**.
+
+---
+
+## 🛠️ Funcionalidades
+
 ✅ Cadastro, listagem, atualização e exclusão de usuários (nome, email, senha)
-
 ✅ CRUD completo de alunos
-
 ✅ Upload e referência de fotos para alunos
-
 ✅ Autenticação de usuários (login, geração de token, sem JWT avançado)
-
 ✅ Validações de dados de entrada
-
 ✅ Organização limpa de controllers, rotas e middlewares
 
-🧰 Tecnologias
-Node.js – Runtime backend
+---
 
-Express – Framework de rotas e servidor
+## 🧰 Tecnologias
 
-PostgreSQL – Banco relacional
+- **Node.js** – Runtime backend
+- **Express** – Framework de rotas e servidor
+- **PostgreSQL** – Banco relacional
+- **Sequelize** – ORM para facilitar a interação com o banco
+- **Multer** – Upload de arquivos (fotos)
+- **bcryptjs** – Criptografia de senhas
+- **jsonwebtoken** – Geração e validação de tokens
+- **dotenv** – Gerenciamento de variáveis de ambiente
 
-Sequelize – ORM para facilitar a interação com o banco
+---
 
-Multer – Upload de arquivos (fotos)
+## ⚙️ Como rodar o projeto
 
-bcryptjs – Criptografia de senhas
+### 1️⃣ Clone o repositório
 
-jsonwebtoken – Geração e validação de tokens
-
-Dotenv – Gerenciamento de variáveis de ambiente
-
-⚙️ Como rodar o projeto
-1️⃣ Clone o repositório:
-
-bash
-Copiar
-Editar
+```bash
 git clone https://github.com/cardosoGu/API.git
 cd API
-2️⃣ Instale as dependências:
+````
 
-bash
-Copiar
-Editar
+### 2️⃣ Instale as dependências
+
+```bash
 npm install
-3️⃣ Configure as variáveis de ambiente:
+```
 
-Crie um arquivo .env na raiz do projeto com:
+### 3️⃣ Configure as variáveis de ambiente
 
-ini
-Copiar
-Editar
+Crie um arquivo `.env` na raiz do projeto com:
+
+```ini
 DATABASE=nome_do_banco
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
@@ -66,81 +64,100 @@ TOKEN_EXPIRATION=7d
 
 PORT=3000
 URL=http://localhost:3000
-4️⃣ Configure o PostgreSQL:
+```
 
-Certifique-se que o PostgreSQL está rodando localmente ou use serviços como Railway ou Neon.
+### 4️⃣ Configure o PostgreSQL
 
-Crie o banco:
+* Certifique-se que o PostgreSQL está rodando localmente ou use serviços como Railway ou Neon.
+* Crie o banco:
 
-bash
-Copiar
-Editar
+```bash
 createdb nome_do_banco
-Rode as migrations (caso tenha):
+```
 
-bash
-Copiar
-Editar
+* Rode as migrations (caso tenha):
+
+```bash
 npx sequelize db:migrate
-5️⃣ Rode o projeto:
+```
 
-bash
-Copiar
-Editar
+### 5️⃣ Rode o projeto
+
+```bash
 npm start
-A API estará disponível em http://localhost:3000.
+```
 
-📡 Endpoints
-Usuários
-POST /users – Cadastrar usuário
+A API estará disponível em [http://localhost:3000](http://localhost:3000).
 
-GET /users – Listar usuários
+---
 
-PUT /users/:id – Atualizar usuário
+## 📡 Endpoints
 
-DELETE /users/:id – Deletar usuário
+### Usuários
 
-POST /login – Autenticação de usuário (retorna token)
+* `POST /users` – Cadastrar usuário
+* `GET /users` – Listar usuários
+* `PUT /users/:id` – Atualizar usuário
+* `DELETE /users/:id` – Deletar usuário
+* `POST /login` – Autenticação de usuário (retorna token)
 
-Alunos
-POST /alunos – Cadastrar aluno
+### Alunos
 
-GET /alunos – Listar alunos
+* `POST /alunos` – Cadastrar aluno
+* `GET /alunos` – Listar alunos
+* `GET /alunos/:id` – Detalhar aluno
+* `PUT /alunos/:id` – Atualizar aluno
+* `DELETE /alunos/:id` – Deletar aluno
 
-GET /alunos/:id – Detalhar aluno
+### Fotos
 
-PUT /alunos/:id – Atualizar aluno
+* `POST /fotos` – Upload de fotos referenciadas a alunos
 
-DELETE /alunos/:id – Deletar aluno
+---
 
-Fotos
-POST /fotos – Upload de fotos referenciadas a alunos
+## 📁 Estrutura do projeto
 
-📁 Estrutura do projeto
-bash
-Copiar
-Editar
+```
 ├── src
-│   ├── config            # Configurações (db, multer, etc.)
-│   ├── controllers       # Lógicas de cada rota
+│   ├── config         # Configurações (db, multer, etc.)
+│   ├── controllers    # Lógicas de cada rota
 │   ├── database
-│   │   ├── migrations    # Migrations do banco
-│   │   └── models        # Modelos Sequelize
-│   ├── middlewares       # Middlewares de autenticação, erros
-│   ├── routes            # Rotas da API
-│   └── server.js         # Ponto de entrada da API
-🖐️ Exemplo de uso
-Criar um usuário via curl:
+│   │   ├── migrations # Migrations do banco
+│   │   └── models     # Modelos Sequelize
+│   ├── middlewares    # Middlewares de autenticação, erros
+│   ├── routes         # Rotas da API
+│   └── server.js      # Ponto de entrada da API
+```
 
-bash
-Copiar
-Editar
+---
+
+## 🖐️ Exemplo de uso
+
+Criar um usuário via `curl`:
+
+```bash
 curl -X POST http://localhost:3000/users \
 -H "Content-Type: application/json" \
 -d '{"name":"João","email":"joao@email.com","password":"123456"}'
-🤝 Contribuições
-Quer melhorar ou estudar junto?
-Abre um PR ou issue aqui no GitHub. 😎
+```
 
-📄 Licença
+---
+
+## 🤝 Contribuições
+
+Quer melhorar ou estudar junto? Abre um PR ou issue aqui no GitHub. 😎
+
+---
+
+## 📄 Licença
+
 Projeto licenciado sob MIT.
+
+```
+
+---
+
+✅ **Pronto pra colar no GitHub sem quebrar.**
+✅ Com seções claras, markdown bem organizado e responsivo na visualização do GH.
+✅ Se quiser, posso te gerar badges e um logo ASCII simples pra personalizar o topo. Quer?
+```
