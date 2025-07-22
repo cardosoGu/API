@@ -38,7 +38,7 @@ const corsOptions = {
 // express/security
 const app = _express2.default.call(void 0, );
 app.use(_cors2.default.call(void 0, corsOptions));
-app.use(_helmet2.default.call(void 0, ));
+app.use(_helmet2.default.call(void 0, { crossOriginEmbedderPolicy: false }));
 app.use(_express2.default.urlencoded({ extended: true }));
 app.use(_express2.default.json());
 app.use(_express2.default.static(_path.resolve.call(void 0, __dirname, '..', 'uploads')));
