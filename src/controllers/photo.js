@@ -6,24 +6,23 @@ const store = async (req, res) => {
     const { originalname, filename } = req.file;
     const { aluno_id } = req.body;
 
-    // verifica se user existe
+    // Check if student exists
     const aluno = await Aluno.findByPk(aluno_id);
     if (!aluno) {
-      return res.status(409).json({ errors: ['Nao foi encontrado um aluno com esse ID na base de dados'] });
+      return res.status(404).json({ errors: ['No student found with this ID in the database'] });
     }
 
-    // verifica se ele ja tem foto cadastrada
+    // Check if student already has a photo
     const fotoAluno = await Foto.findOne({ where: { aluno_id } });
     if (fotoAluno) {
-      return res.status(404).json({ errors: ['Usuario ja tem Foto!'] });
+      return res.status(409).json({ errors: ['Student already has a photo'] });
     }
 
-    // adiciona foto
+    // Add photo
     const foto = await Foto.create({ aluno_id, originalname, filename });
-
     return res.json(foto);
   } catch (e) {
-    return res.status(404).json({ errors: ['erro ao enviar a foto'] });
+    return res.status(400).json({ errors: [e.message || 'Error uploading the photo'] });
   }
 };
 
@@ -32,47 +31,47 @@ const update = async (req, res) => {
     const { originalname, filename } = req.file;
     const { aluno_id } = req.body;
 
-    // verifica se user existe
+    // Check if student exists
     const aluno = await Aluno.findByPk(aluno_id);
     if (!aluno) {
-      return res.status(404).json({ errors: ['Nao foi encontrado um aluno com esse ID na base de dados'] });
+      return res.status(404).json({ errors: ['No student found with this ID in the database'] });
     }
 
-    // verifica se ele ja tem foto cadastrada para mudar
+    // Check if student has a photo to update
     const fotoAluno = await Foto.findOne({ where: { aluno_id } });
     if (!fotoAluno) {
-      return res.status(404).json({ errors: ['Voce ainda nao tem foto, favor cadastrar uma foto'] });
+      return res.status(404).json({ errors: ['Student does not have a photo, please upload one first'] });
     }
 
-    // atualiza foto
+    // Update photo
     const foto = await fotoAluno.update({ aluno_id, originalname, filename });
-
     return res.json(foto);
   } catch (e) {
-    return res.status(404).json({ errors: ['erro ao enviar a foto'] });
+    return res.status(400).json({ errors: [e.message || 'Error updating the photo'] });
   }
 };
+
 const Delete = async (req, res) => {
   try {
     const { aluno_id } = req.body;
 
-    // verifica se aluno existe
+    // Check if student exists
     const aluno = await Aluno.findByPk(aluno_id);
     if (!aluno) {
-      return res.status(404).json({ errors: ['Nao foi encontrado um aluno com esse ID na base de dados'] });
+      return res.status(404).json({ errors: ['No student found with this ID in the database'] });
     }
 
-    // verifica se ele ja tem foto cadastrada para mudar
+    // Check if student has a photo to delete
     const fotoAluno = await Foto.findOne({ where: { aluno_id } });
     if (!fotoAluno) {
-      return res.status(404).json({ errors: ['Voce ainda nao tem foto, favor cadastrar uma foto'] });
+      return res.status(404).json({ errors: ['Student does not have a photo to delete'] });
     }
 
-    // atualiza foto
+    // Delete photo
     await fotoAluno.destroy();
-    return res.json({ errors: ['Foto deletada! favor cadastrar outra'] });
+    return res.json({ message: 'Photo deleted successfully' });
   } catch (e) {
-    return res.status(404).json({ errors: ['erro ao enviar a foto'] });
+    return res.status(400).json({ errors: [e.message || 'Error deleting the photo'] });
   }
 };
 

@@ -2,66 +2,68 @@
 
  class Aluno extends _sequelize.Model {
   static init(sequelize) {
-    super.init({
-      nome: {
-        type: _sequelize.DataTypes.STRING,
-        defaultValue: '',
-      },
+    super.init(
+      {
+        nome: {
+          type: _sequelize.DataTypes.STRING,
+          defaultValue: '',
+        },
 
-      sobrenome: {
-        type: _sequelize.DataTypes.STRING,
-        defaultValue: '',
-      },
+        sobrenome: {
+          type: _sequelize.DataTypes.STRING,
+          defaultValue: '',
+        },
 
-      email: {
-        type: _sequelize.DataTypes.STRING,
-        defaultValue: '',
-        validate: {
-          isEmail: {
-            msg: 'email invalido!',
+        email: {
+          type: _sequelize.DataTypes.STRING,
+          defaultValue: '',
+          validate: {
+            isEmail: {
+              msg: 'Invalid email',
+            },
+          },
+        },
+
+        idade: {
+          type: _sequelize.DataTypes.INTEGER,
+          defaultValue: '',
+          validate: {
+            isInt: {
+              msg: 'Invalid age',
+            },
+          },
+        },
+
+        peso: {
+          type: _sequelize.DataTypes.FLOAT,
+          defaultValue: '',
+          validate: {
+            isFloat: {
+              msg: 'Invalid weight',
+            },
+          },
+        },
+
+        altura: {
+          type: _sequelize.DataTypes.FLOAT,
+          defaultValue: '',
+          validate: {
+            isFloat: {
+              msg: 'Invalid height',
+            },
           },
         },
       },
-
-      idade: {
-        type: _sequelize.DataTypes.INTEGER,
-        defaultValue: '',
-        validate: {
-          isInt: {
-            msg: 'idade invalida',
-          },
-        },
+      {
+        sequelize,
+        schema: 'escola',
+        tableName: 'alunos',
       },
-
-      peso: {
-        type: _sequelize.DataTypes.FLOAT,
-        defaultValue: '',
-        validate: {
-          isFloat: {
-            msg: 'Peso invalido',
-          },
-        },
-      },
-
-      altura: {
-        type: _sequelize.DataTypes.FLOAT,
-        defaultValue: '',
-        validate: {
-          isFloat: {
-            msg: 'altura invalida',
-          },
-        },
-      },
-
-    }, {
-      sequelize,
-      schema: 'escola',
-      tableName: 'alunos',
-    });
+    );
     return this;
   }
 
-  static associate(model) {
-    this.hasOne(model.foto, { foreignKey: 'aluno_id' });
+  static associate(models) {
+    this.hasOne(models.foto, { foreignKey: 'aluno_id' });
   }
 } exports.default = Aluno;

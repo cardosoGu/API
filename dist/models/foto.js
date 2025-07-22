@@ -3,41 +3,45 @@ var _appConfig = require('../config/appConfig'); var _appConfig2 = _interopRequi
 
  class foto extends _sequelize.Model {
   static init(sequelize) {
-    super.init({
-      originalname: {
-        type: _sequelize.DataTypes.STRING,
-        defaultValue: '',
-        validate: {
-          notEmpty: {
-            msg: 'Campo nao pode ficar vazio',
+    super.init(
+      {
+        originalname: {
+          type: _sequelize.DataTypes.STRING,
+          defaultValue: '',
+          validate: {
+            notEmpty: {
+              msg: 'Field cannot be empty',
+            },
           },
         },
-      },
 
-      filename: {
-        type: _sequelize.DataTypes.STRING,
-        defaultValue: '',
-        validate: {
-          notEmpty: {
-            msg: 'Campo nao pode ficar vazio',
+        filename: {
+          type: _sequelize.DataTypes.STRING,
+          defaultValue: '',
+          validate: {
+            notEmpty: {
+              msg: 'Field cannot be empty',
+            },
+          },
+        },
+
+        url: {
+          type: _sequelize.DataTypes.VIRTUAL,
+          get() {
+            return `${_appConfig2.default.url}/images/${this.getDataValue('filename')}`;
           },
         },
       },
-      url: {
-        type: _sequelize.DataTypes.VIRTUAL,
-        get() {
-          return `${_appConfig2.default.url}/images/${this.getDataValue('filename')}`;
-        },
+      {
+        sequelize,
+        schema: 'escola',
+        tableName: 'foto',
       },
-    }, {
-      sequelize,
-      schema: 'escola',
-      tableName: 'foto',
-    });
+    );
     return this;
   }
 
-  static associate(models) { // esses dados pertencem ao aluno em q aluno_id é ligado
+  static associate(models) {
     this.belongsTo(models.Aluno, { foreignKey: 'aluno_id' });
   }
 } exports.default = foto;

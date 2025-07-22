@@ -1,36 +1,30 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
 
-// validar token user q vem na header do navegado/verifica se user esta logado
+// validate user token sent in header (check if user is logged in)
 export default async (req, res, next) => {
   const { authorization } = req.headers;
-  // nao tem token autorizacao == deslogado
+
   if (!authorization) {
-    return res.status(401).json({ error: ['login Required'] });
+    return res.status(401).json({ error: ['Login required'] });
   }
-  // separa 'bearer | token'
-  const [texto, token] = authorization.split(' ');
+
+  const [text, token] = authorization.split(' ');
 
   try {
-    // verifica se token é valido
-    const dados = jwt.verify(token, process.env.TOKEN_SECRET);
-    const { id, email } = dados;
+    const data = jwt.verify(token, process.env.TOKEN_SECRET);
+    const { id, email } = data;
 
-    // verifica se o usuario mudou o email, e ainda bate com o token
     const user = await User.findByPk(id);
-    if (!user) {
-      return res.status(401).json({ error: ['Token expirado ou invalido'] });
-    }
-    if (user.email !== email) {
-      return res.status(401).json({ error: ['Token expirado ou invalido'] });
+    if (!user || user.email !== email) {
+      return res.status(401).json({ error: ['Token expired or invalid'] });
     }
 
-    // se valido, pegar as info de payload e indentifica qm fez req
     req.userId = id;
     req.userEmail = email;
 
     return next();
   } catch (e) {
-    return res.status(401).json({ error: ['Token expirado ou invalido'] });
+    return res.status(401).json({ error: ['Token expired or invalid'] });
   }
 };

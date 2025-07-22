@@ -1,13 +1,12 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
-// create
 
+// create
 const create = async (req, res) => {
   try {
     const novoUser = await User.create(req.body);
     const { id, nome, email } = novoUser;
 
-    // cria token de login qnd criar a conta
     const token = jwt.sign(
       { id, email },
       process.env.TOKEN_SECRET,
@@ -18,9 +17,13 @@ const create = async (req, res) => {
       id, email, nome, token,
     });
   } catch (e) {
-    return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    if (e.errors) {
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    }
+    return res.status(400).json({ errors: [e.message || 'Unknown error'] });
   }
 };
+
 // index
 const index = async (req, res) => {
   try {
@@ -31,37 +34,46 @@ const index = async (req, res) => {
 
     return res.json(showUsers);
   } catch (e) {
-    return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    if (e.errors) {
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    }
+    return res.status(400).json({ errors: [e.message || 'Unknown error'] });
   }
 };
+
 // show
 const show = async (req, res) => {
   try {
-    const showUser = await User.findByPk(req.userId); // id - JWT
+    const showUser = await User.findByPk(req.userId);
     if (!showUser) {
-      return res.status(400).json({ errors: ['ID de usuario não encontrado'] });
+      return res.status(400).json({ errors: ['User ID not found'] });
     }
     const { id, nome, email } = showUser;
     return res.json({ id, nome, email });
   } catch (e) {
-    return res.status(404).json({ errors: e.errors.map((err) => err.message) });
+    if (e.errors) {
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    }
+    return res.status(400).json({ errors: [e.message || 'Unknown error'] });
   }
 };
 
 // update
-
 const update = async (req, res) => {
   try {
     const user = await User.findByPk(req.userId);
     if (!user) {
-      return res.status(400).json({ errors: ['ID de usuario não encontrado'] });
+      return res.status(400).json({ errors: ['User ID not found'] });
     }
 
     const newUser = await user.update(req.body);
 
     return res.json(newUser);
   } catch (e) {
-    return res.status(404).json({ errors: e.errors.map((err) => err.message) });
+    if (e.errors) {
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    }
+    return res.status(400).json({ errors: [e.message || 'Unknown error'] });
   }
 };
 
@@ -70,13 +82,16 @@ const Delete = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) {
-      return res.status(400).json({ errors: ['ID de usuario não encontrado'] });
+      return res.status(400).json({ errors: ['User ID not found'] });
     }
     await user.destroy();
 
-    return res.json('Usuario deletado');
+    return res.json('User deleted');
   } catch (e) {
-    return res.status(404).json({ errors: e.errors.map((err) => err.message) });
+    if (e.errors) {
+      return res.status(400).json({ errors: e.errors.map((err) => err.message) });
+    }
+    return res.status(400).json({ errors: [e.message || 'Unknown error'] });
   }
 };
 
