@@ -1,9 +1,14 @@
 import jwt from 'jsonwebtoken';
+import isEmail from 'validator/lib/isEmail';
 import User from '../models/user';
 
 // logar/criar token de sessao ao user
 const store = async (req, res) => {
   const { email = '', password = '' } = req.body;
+
+  if (!isEmail(email)) {
+    return res.status(400).json({ error: ['email invalido'] });
+  }
 
   if (!email || !password) {
     return res.status(401).json({ errors: ['informacoes invalidas'] });
