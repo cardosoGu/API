@@ -95,7 +95,7 @@ A API estará disponível em [http://localhost:3000](http://localhost:3000).
 
 ### Usuários
 
-* `POST /users` – Cadastrar usuário
+* `POST /users` – Cadastrar usuário (retorna token)
 * `GET /users` – Listar usuários
 * `PUT /users/:id` – Atualizar usuário
 * `DELETE /users/:id` – Deletar usuário
@@ -131,15 +131,10 @@ A API estará disponível em [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🖐️ Exemplo de uso
-
-Criar um usuário via `curl`:
-
+### Teste a API
+A API tá no ar! 🎉 Experimente:
 ```bash
-curl -X POST http://localhost:3000/users \
--H "Content-Type: application/json" \
--d '{"name":"João","email":"joao@email.com","password":"123456"}'
-```
+curl -X GET http://35.247.228.63:81/alunos -H "Authorization: Bearer SEU_TOKEN - gerado no login ou cadastro de usuario"
 
 ---
 
