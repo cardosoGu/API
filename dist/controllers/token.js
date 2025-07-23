@@ -1,32 +1,36 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _jsonwebtoken = require('jsonwebtoken'); var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+var _isEmail = require('validator/lib/isEmail'); var _isEmail2 = _interopRequireDefault(_isEmail);
 var _user = require('../models/user'); var _user2 = _interopRequireDefault(_user);
 
-// logar/criar token de sessao ao user
+// log in / create session token for user
 const store = async (req, res) => {
   const { email = '', password = '' } = req.body;
 
+  if (!_isEmail2.default.call(void 0, email)) {
+    return res.status(400).json({ errors: ['Invalid email'] });
+  }
+
   if (!email || !password) {
-    return res.status(401).json({ errors: ['informacoes invalidas'] });
+    return res.status(401).json({ errors: ['Invalid information'] });
   }
 
   const user = await _user2.default.findOne({ where: { email } });
-  if (!user) { // usuario nao encontrado
-    return res.status(401).json({ errors: ['Usuario nao encontrado'] });
-  } // senha body == igual user do BD
-  if (!(await user.passwordIsValid(password))) {
-    return res.status(401).json({ errors: ['Senha invalida'] });
+  if (!user) {
+    return res.status(401).json({ errors: ['User not found'] });
   }
 
-  // user do BD já é instância de User/Model, por isso tem métodos sem precisar instanciar.
+  if (!(await user.passwordIsValid(password))) {
+    return res.status(401).json({ errors: ['Invalid password'] });
+  }
 
-  const { id } = user; // pega id de user (destructuring)
-  const token = _jsonwebtoken2.default.sign( // criar token
-    { id, email }, // payload = dados do user salvos no token pra identificar no login
-    process.env.TOKEN_SECRET, // senha .env
-    { expiresIn: process.env.TOKEN_EXPIRATION }, // duração .env
+  const { id, nome } = user;
+  const token = _jsonwebtoken2.default.sign(
+    { id, email },
+    process.env.TOKEN_SECRET,
+    { expiresIn: process.env.TOKEN_EXPIRATION },
   );
 
-  return res.json({ token, user: { nome: user.nome, id, email } });
+  return res.json({ token, user: { name: nome, id, email } });
 };
 
 exports. default = { store };
