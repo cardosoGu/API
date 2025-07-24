@@ -3,8 +3,8 @@ var _User = require('../controllers/User'); var _User2 = _interopRequireDefault(
 var _loginRequired = require('../middlewares/loginRequired'); var _loginRequired2 = _interopRequireDefault(_loginRequired);
 
 const router = _express.Router.call(void 0, );
-// nao precisa
-router.get('/', _User2.default.index);
+// fechado por seguranca
+// router.get('/', UserController.index);
 router.get('/show', _loginRequired2.default, _User2.default.show);
 
 router.post('/store', _User2.default.create);

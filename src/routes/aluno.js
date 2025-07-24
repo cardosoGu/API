@@ -5,10 +5,10 @@ import loginRequired from '../middlewares/loginRequired';
 
 const router = Router();
 
-router.get('/', alunoController.index);
-router.get('/:id', alunoController.show);
+router.get('/', loginRequired, alunoController.index);
+router.get('/:id', loginRequired, alunoController.show);
 
-router.post('/store', alunoController.store);
+router.post('/store', loginRequired, alunoController.store);
 router.put('/update/:id', loginRequired, alunoController.update);
 router.delete('/delete/:id', loginRequired, alunoController.Delete);
 

@@ -3,8 +3,8 @@ import UserController from '../controllers/User';
 import loginRequired from '../middlewares/loginRequired';
 
 const router = Router();
-// nao precisa
-router.get('/', UserController.index);
+// fechado por seguranca
+// router.get('/', UserController.index);
 router.get('/show', loginRequired, UserController.show);
 
 router.post('/store', UserController.create);
