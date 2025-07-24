@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import User from '../models/user';
 
 // create
@@ -62,13 +63,26 @@ const show = async (req, res) => {
 const update = async (req, res) => {
   try {
     const user = await User.findByPk(req.userId);
+    const {
+      nome, email, password, senhaAtual,
+    } = req.body;
     if (!user) {
       return res.status(400).json({ errors: ['User ID not found'] });
     }
+    if (password) {
+      if (!senhaAtual) {
+        return res.status(400).json({ errors: ['Current password is required to change password'] });
+      }
+      if (!bcrypt.compareSync(senhaAtual, user.password_hash)) {
+        return res.status(400).json({ errors: ['Incorrect password'] });
+      }
+    }
+    const data = { nome, email };
+    // so envia o valor se o user enviar password
+    if (password) data.password = password;
+    const newUser = await user.update(data);
 
-    const newUser = await user.update(req.body);
-
-    return res.json(newUser);
+    return res.json({ nome, email });
   } catch (e) {
     if (e.errors) {
       return res.status(400).json({ errors: e.errors.map((err) => err.message) });

@@ -1,4 +1,5 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _jsonwebtoken = require('jsonwebtoken'); var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+var _bcryptjs = require('bcryptjs'); var _bcryptjs2 = _interopRequireDefault(_bcryptjs);
 var _user = require('../models/user'); var _user2 = _interopRequireDefault(_user);
 
 // create
@@ -62,13 +63,26 @@ const show = async (req, res) => {
 const update = async (req, res) => {
   try {
     const user = await _user2.default.findByPk(req.userId);
+    const {
+      nome, email, password, senhaAtual,
+    } = req.body;
     if (!user) {
       return res.status(400).json({ errors: ['User ID not found'] });
     }
+    if (password) {
+      if (!senhaAtual) {
+        return res.status(400).json({ errors: ['Current password is required to change password'] });
+      }
+      if (!_bcryptjs2.default.compareSync(senhaAtual, user.password_hash)) {
+        return res.status(400).json({ errors: ['Incorrect password'] });
+      }
+    }
+    const data = { nome, email };
+    // so envia o valor se o user enviar password
+    if (password) data.password = password;
+    const newUser = await user.update(data);
 
-    const newUser = await user.update(req.body);
-
-    return res.json(newUser);
+    return res.json({ nome, email });
   } catch (e) {
     if (e.errors) {
       return res.status(400).json({ errors: e.errors.map((err) => err.message) });
