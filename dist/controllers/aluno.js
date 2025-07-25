@@ -51,7 +51,7 @@ const show = async (req, res) => {
       attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
       include: {
         model: _foto2.default,
-        attributes: ['filename'],
+        attributes: ['filename', 'url'],
       },
     });
 
@@ -59,12 +59,7 @@ const show = async (req, res) => {
       return res.status(400).json({ errors: ['Student not found in the database'] });
     }
 
-    const {
-      id, nome, sobrenome, email, idade, peso, altura,
-    } = aluno;
-    return res.json({
-      id, nome, sobrenome, email, idade, peso, altura,
-    });
+    return res.json(aluno);
   } catch (e) {
     if (e.errors) {
       return res.status(400).json({ errors: e.errors.map((err) => err.message) });
