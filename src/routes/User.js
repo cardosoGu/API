@@ -9,6 +9,6 @@ router.get('/show', loginRequired, UserController.show);
 
 router.post('/store', UserController.create);
 router.put('/update', loginRequired, UserController.update);
-router.delete('/delete/:id', UserController.Delete);
+router.delete('/delete/:id', loginRequired, UserController.Delete);
 
 export default router;

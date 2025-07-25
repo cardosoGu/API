@@ -82,7 +82,13 @@ const update = async (req, res) => {
     if (password) data.password = password;
     const newUser = await user.update(data);
 
-    return res.json({ nome, email });
+    const token = jwt.sign(
+      { id: req.userId, email },
+      process.env.TOKEN_SECRET,
+      { expiresIn: process.env.TOKEN_EXPIRATION },
+    );
+
+    return res.json({ nome, email, token });
   } catch (e) {
     if (e.errors) {
       return res.status(400).json({ errors: e.errors.map((err) => err.message) });
@@ -94,7 +100,7 @@ const update = async (req, res) => {
 // delete
 const Delete = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.userId);
     if (!user) {
       return res.status(400).json({ errors: ['User ID not found'] });
     }

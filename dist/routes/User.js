@@ -9,6 +9,6 @@ router.get('/show', _loginRequired2.default, _User2.default.show);
 
 router.post('/store', _User2.default.create);
 router.put('/update', _loginRequired2.default, _User2.default.update);
-router.delete('/delete/:id', _User2.default.Delete);
+router.delete('/delete/:id', _loginRequired2.default, _User2.default.Delete);
 
 exports. default = router;
