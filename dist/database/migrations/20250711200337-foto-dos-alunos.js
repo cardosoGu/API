@@ -39,6 +39,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // null
+    await queryInterface.dropTable({ schema: 'escola', tableName: 'foto' });
   },
 };

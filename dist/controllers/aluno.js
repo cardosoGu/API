@@ -4,6 +4,7 @@ var _foto = require('../models/foto'); var _foto2 = _interopRequireDefault(_foto
 const index = async (req, res) => {
   try {
     const alunos = await _aluno2.default.findAll({
+      where: { user_id: req.userId },
       attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
       order: [['id', 'DESC']],
       include: {
@@ -11,10 +12,6 @@ const index = async (req, res) => {
         attributes: ['filename', 'url'],
       },
     });
-
-    if (alunos.length === 0) {
-      return res.status(404).json({ errors: ['No students registered in the database'] });
-    }
 
     return res.json(alunos);
   } catch (e) {
@@ -29,9 +26,12 @@ const store = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ errors: ['Please correct the provided information'] });
   }
+  if (!req.userId) {
+    return res.status(400).json({ errors: ['User ID is missing'] });
+  }
 
   try {
-    const aluno = await _aluno2.default.create(req.body);
+    const aluno = await _aluno2.default.create({ ...req.body, user_id: req.userId });
     return res.json(aluno);
   } catch (e) {
     if (e.errors) {
@@ -48,7 +48,7 @@ const show = async (req, res) => {
 
   try {
     const aluno = await _aluno2.default.findByPk(req.params.id, {
-      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
+      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura', 'user_id'],
       include: {
         model: _foto2.default,
         attributes: ['filename', 'url'],
@@ -57,6 +57,9 @@ const show = async (req, res) => {
 
     if (!aluno) {
       return res.status(400).json({ errors: ['Student not found in the database'] });
+    }
+    if (aluno.user_id !== req.userId) {
+      return res.status(403).json({ errors: ['Access denied'] });
     }
 
     return res.json(aluno);
@@ -79,6 +82,9 @@ const update = async (req, res) => {
     if (!aluno) {
       return res.status(400).json({ errors: ['Student not found in the database'] });
     }
+    if (aluno.user_id !== req.userId) {
+      return res.status(400).json({ errors: ['You dont have this student'] });
+    }
 
     const updatedAluno = await aluno.update(req.body);
     return res.json(updatedAluno);
@@ -100,6 +106,9 @@ const Delete = async (req, res) => {
     const aluno = await _aluno2.default.findByPk(id);
     if (!aluno) {
       return res.status(400).json({ errors: ['Invalid student ID'] });
+    }
+    if (aluno.user_id !== req.userId) {
+      return res.status(400).json({ errors: ['You dont have this student'] });
     }
 
     await aluno.destroy();

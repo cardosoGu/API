@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.changeColumn( // mudar coluna
+    await queryInterface.changeColumn(
       { schema: 'escola', tableName: 'alunos' },
       'email',
       {
@@ -11,4 +11,18 @@ module.exports = {
       },
     );
   },
+
+  async down(queryInterface, Sequelize) {
+    // volta para o estado anterior da coluna, ex:
+    await queryInterface.changeColumn(
+      { schema: 'escola', tableName: 'alunos' },
+      'email',
+      {
+        type: Sequelize.STRING,
+        allowNull: true,
+        unique: false,
+      },
+    );
+  },
+
 };

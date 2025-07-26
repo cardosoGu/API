@@ -61,4 +61,8 @@ var _bcryptjs = require('bcryptjs'); var _bcryptjs2 = _interopRequireDefault(_bc
   passwordIsValid(password) {
     return _bcryptjs2.default.compare(password, this.password_hash);
   }
+
+  static associate(models) {
+    this.hasMany(models.Aluno, { foreignKey: 'user_id' });
+  }
 } exports.default = User;

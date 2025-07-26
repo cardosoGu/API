@@ -40,7 +40,8 @@ const update = async (req, res) => {
     // Check if student has a photo to update
     const fotoAluno = await _foto2.default.findOne({ where: { aluno_id } });
     if (!fotoAluno) {
-      return res.status(404).json({ errors: ['Student does not have a photo, please upload one first'] });
+      const foto = await _foto2.default.create({ aluno_id, originalname, filename });
+      return res.json(foto);
     }
 
     // Update photo
