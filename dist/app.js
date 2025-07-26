@@ -20,10 +20,10 @@ var _multerErrorHandler = require('./middlewares/multerErrorHandler'); var _mult
 _dotenv2.default.config();
 
 const whitelist = [
-  'http://35.247.228.63',
-  'http://localhost:3000',
+  'http://35.247.228.63:81', // sua API real
+  'http://35.247.228.63:82', // (se tiver outro serviço rodando)
+  'http://localhost:3000', // front local
 ];
-
 const corsOptions = {
   origin(origin, callback) {
     if (!origin || whitelist.includes(origin)) {
