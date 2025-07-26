@@ -16,7 +16,7 @@ const store = async (req, res) => {
 
   const user = await User.findOne({ where: { email } });
   if (!user) {
-    return res.status(401).json({ errors: ['User not found'] });
+    return res.status(401).json({ errors: ['Incorrect Email'] });
   }
 
   if (!(await user.passwordIsValid(password))) {
