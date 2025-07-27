@@ -30,7 +30,9 @@ const store = async (req, res) => {
     { expiresIn: process.env.TOKEN_EXPIRATION },
   );
 
-  return res.json({ token, user: { name: nome, id, email } });
+  return res.json({
+    token, nome, id, email,
+  });
 };
 
 exports. default = { store };
